@@ -2,6 +2,10 @@ const express = require ('express')
 const app = express()
 const PORT = 3000
 
+app.use(express.urlencoded({extended: true}))
+app.use(express.json())
+
+
 
 const characters = [
     {
@@ -43,6 +47,10 @@ app.get('/api/characters', (req, res) => {
 
 // /api/characters/:routename
 
+// API ROUTES
+
+// 
+
 app.get('/api/characters/:routeName', (req, res) => {
     console.log(req.params)
 
@@ -54,6 +62,13 @@ app.get('/api/characters/:routeName', (req, res) => {
 
     console.log(character)
     res.json(character)
+})
+
+// postman
+
+app.post('/api/characters/add', (req, res) => {
+    console.log(req.body)
+    res.end()
 })
 
 app.listen(PORT, () => {
