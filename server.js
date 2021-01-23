@@ -34,6 +34,9 @@ const characters = [
     }
 
 ]
+
+
+
 app.get('/', (req, res) => {
     res.send('May the force be with you')
 
@@ -67,8 +70,14 @@ app.get('/api/characters/:routeName', (req, res) => {
 // postman
 
 app.post('/api/characters/add', (req, res) => {
-    console.log(req.body)
-    res.end()
+    // console.log(req.body)
+    // console.log(characters)
+
+    const newCharacter = req.body 
+    newCharacter.routeName = newCharacter.name.replace(/ /g, "").toLowerCase()
+    characters.push(newCharacter)
+
+    res.end("Everything ok")
 })
 
 app.listen(PORT, () => {
