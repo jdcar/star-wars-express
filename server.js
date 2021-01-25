@@ -1,10 +1,12 @@
-const express = require ('express')
+const express = require('express')
 const app = express()
 const PORT = 3000
 
-app.use(express.urlencoded({extended: true}))
-app.use(express.json())
+const path = require('path')
 
+// Copy/Paste this into all projects
+app.use(express.urlencoded({ extended: true }))
+app.use(express.json())
 
 
 const characters = [
@@ -12,74 +14,66 @@ const characters = [
         name: 'Yoda',
         role: 'Jedi Master',
         forcePoints: 100000,
-        age: 900, 
-        avatar: 'https://images.app.goo.gl/YwNw3ijVo95eYe5S6',
+        age: 900,
+        avatar: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/baby-yoda-old-yoda-1574103229.jpg?crop=0.486xw:0.973xh;0.514xw,0&resize=480:*',
         routeName: 'yoda'
     },
     {
         name: 'Luke Skywalker',
         role: 'Jedi Master',
         forcePoints: 10000,
-        age: 40, 
-        avatar: 'https://images.app.goo.gl/M3Kv4xFfmzFo6cdi8',
+        age: 40,
+        avatar: 'https://static.wikia.nocookie.net/star-wars-canon-extended/images/2/2c/Luke_Sky7.jpg/revision/latest/scale-to-width-down/340?cb=20180123070942',
         routeName: 'lukeskywalker'
     },
     {
         name: 'Princess Leia',
-        role: 'Princess General',
+        role: 'General Princess',
         forcePoints: 100,
-        age: 40, 
-        avatar: 'https://images.app.goo.gl/9S8E6XPf4iYSiNs99',
+        age: 40,
+        avatar: 'https://api.time.com/wp-content/uploads/2016/12/carrie-fisher-movies-2.jpg?w=600&quality=85',
         routeName: 'princessleia'
     }
-
 ]
-
-
-
-app.get('/', (req, res) => {
-    res.send('May the force be with you')
-
-})
-
-// /api/characters - show all char data
-
-app.get('/api/characters', (req, res) => {
-    res.json(characters)
-})
-
-// /api/characters/:routename
-
-// API ROUTES
 
 // 
 
+
+
+// 
+
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/index.html'))
+})
+
+app.get('/add', (req, res) => {
+    res.sendFile(path.join(__dirname + '/public/add.html'))
+    console.log(path.join(__dirname + '/public/add.html'))
+})
+
+
+app.get('/api/characters', (req, res) => {
+
+    res.json(characters)
+})
+
 app.get('/api/characters/:routeName', (req, res) => {
-    console.log(req.params)
-
     const targetCharacter = req.params.routeName
-
-    const character = characters.find(character =>{
-        return character.routeName=== targetCharacter
+    const character = characters.find(character => {
+        return character.routeName === targetCharacter
     })
-
-    console.log(character)
     res.json(character)
 })
 
-// postman
-
 app.post('/api/characters/add', (req, res) => {
-    // console.log(req.body)
-    // console.log(characters)
-
-    const newCharacter = req.body 
-    newCharacter.routeName = newCharacter.name.replace(/ /g, "").toLowerCase()
+    const newCharacter = req.body
+    newCharacter.routeName = newCharacter.name.replace(/ /g, '').toLowerCase()
     characters.push(newCharacter)
+    res.status(200).send()
 
-    res.end("Everything ok")
 })
 
+
 app.listen(PORT, () => {
-    console.log(`Server listening at http://localhost:${PORT}`)
+    console.log(`Example app listening at http://localhost:${PORT}`)
 })
